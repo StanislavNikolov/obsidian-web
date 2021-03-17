@@ -1,8 +1,67 @@
 "use strict;"
 
-// Arrays to render (Note: not the same as the once in main.js)
-const nodes = []; // all nodes objects are stored here
-const links = []; // all links are stored here
+const canvasDOM = document.getElementById('canvas');
+
+// Scene with static methods for managing bodies and the canvas
+class Scene {
+    // Arrays to render (Note: not the same as the once in main.js)
+    static nodes = [];
+    static links = [];
+
+    // pos: obj {x, y}, attached: obj (Node), held: boolean
+    static mouse = { pos: { x: null, y: null }, attached: null, held: false };
+
+    static ctx = null;
+
+    constructor(ctx) {
+        Scene.ctx = ctx;
+        // setup canvas event listeners
+        canvas.addEventListener('mousedown', (e) => { 
+            Scene.mouse.held = true;
+         }, false);
+
+        canvas.addEventListener('mouseup', (e) => { 
+            Scene.mouse.held = false;
+            Scene.mouse.pos = { x: null, y: null };
+            Scene.mouse.attached = null;
+        }, false);
+        canvas.addEventListener('mousemove', (e) => {
+            if (Scene.mouse.held) {
+                Scene.mouse.pos.x = e.offsetX;
+                Scene.mouse.pos.y = e.offsetY
+
+                // Detect click on node
+                for(const node of Scene.nodes){
+                    const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Scene.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Scene.mouse.pos.y), 2));
+                    if(dist < node.pos.r){
+                        node.onclick();
+                    } 
+                }
+            }
+        }, false);
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if(e.deltaY > 0){
+                // zoom out
+                ctx.scale(0.95, 0.95);
+            } else {
+                // zoom in
+                ctx.scale(1.05, 1.05);
+            }
+            
+
+        }, false);
+    }
+    add(node) {
+        Scene.nodes.push(node);
+    }
+    updateMouse() {
+        if(Scene.mouse.attached) {
+            Scene.mouse.attached.pos.x = Scene.mouse.pos.x;
+            Scene.mouse.attached.pos.y = Scene.mouse.pos.y;
+        }        
+    }
+}
 
 /*
  * Every Node represents a file (NOT a folder). It can be linked
@@ -21,14 +80,10 @@ class Node {
     appearance = null;
 
     constructor(path, pos, appearance) {
-        console.log("renderer: node created");
-
         this.path       = this.tokenizePath(path).path;
         this.filename   = this.tokenizePath(path).filename;
         this.pos        = pos;
         this.appearance = appearance;
-
-        nodes.push(this);
     }
 
     /* 
@@ -46,20 +101,24 @@ class Node {
      * The onclick event for the Node
      */
     onclick() {
-        console.log("test");
+        Scene.mouse.attached = this;
     }
 }
 
 /*
  * Params: [0] ctx object to draw to
  */
-const Render = ({width, height}, ctx) => {
+const Render = () => {
+    const ctx = Scene.ctx;
+    const width = canvasDOM.width;
+    const height = canvasDOM.height;
+
     ctx.fillStyle = "gray";
     ctx.fillRect(0, 0, width, height);
 
-    for(const node of nodes){
+    for(const node of Scene.nodes){
         ctx.beginPath();
-        ctx.fillStyle = "green";
+        ctx.fillStyle = node.appearance.color;
 
         ctx.arc(node.pos.x, node.pos.y, node.pos.r, 0, 2 * Math.PI);
         ctx.stroke();
@@ -69,4 +128,4 @@ const Render = ({width, height}, ctx) => {
     }
 }
 
-export default { Node, Render }
+export default { Node, Render, Scene }
