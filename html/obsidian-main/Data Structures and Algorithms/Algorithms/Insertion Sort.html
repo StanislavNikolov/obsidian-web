@@ -1,0 +1,63 @@
+<!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+# Insertion Sort
+
+---
+
+## Table of Contents
+-	*[[#Efficiency Table]]*
+-	*[[#Definition]]*
+-	*[[#Implementation Java]]*
+-	*[[#Complexity Analysis]]*
+
+
+---
+
+## Efficiency Table
+|                      | Average  | Worst    | Best    |
+|----------------------|----------|----------|---------|
+| **Bubble Sort**      | O(N ^ 2) | O(N ^ 2) | O(N ^ 2)|
+| Adaptive Bubble Sort | O(N)     | O(log N) | O(N)    |
+|                      | O(1)     | O(N)     | O(N)    |
+|                      | O(N)     | O(N)     | O(N)    |
+|                      | O(log N) | O(log N) | O(log N)| 
+
+---
+
+## Definition
+**Insertion sort** is a simple sorting algorithm that builds the final sorted array (or list) one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort. However, insertion sort provides several advantages:
+-   Simple implementation: [Jon Bentley](https://en.wikipedia.org/wiki/Jon_Bentley_(computer_scientist) "Jon Bentley (computer scientist)") shows a three-line [C](https://en.wikipedia.org/wiki/C_(programming_language) "C (programming language)") version, and a five-line [optimized](https://en.wikipedia.org/wiki/Program_optimization "Program optimization") version[\[1\]](https://en.wikipedia.org/wiki/Insertion_sort#cite_note-pearls-1)
+-   Efficient for (quite) small data sets, much like other quadratic sorting algorithms
+-   More efficient in practice than most other simple quadratic (i.e., [O](https://en.wikipedia.org/wiki/Big_O_notation "Big O notation")(_n_2)) algorithms such as [selection sort](https://en.wikipedia.org/wiki/Selection_sort "Selection sort") or [bubble sort](https://en.wikipedia.org/wiki/Bubble_sort "Bubble sort")
+-   [Adaptive](https://en.wikipedia.org/wiki/Adaptive_sort "Adaptive sort"), i.e., efficient for data sets that are already substantially sorted: the [time complexity](https://en.wikipedia.org/wiki/Time_complexity "Time complexity") is [O](https://en.wikipedia.org/wiki/Big_O_notation "Big O notation")(_kn_) when each element in the input is no more than k places away from its sorted position
+-   [Stable](https://en.wikipedia.org/wiki/Stable_sort "Stable sort"); i.e., does not change the relative order of elements with equal keys
+-   [In-place](https://en.wikipedia.org/wiki/In-place_algorithm "In-place algorithm"); i.e., only requires a constant amount O(1) of additional memory space
+-   [Online](https://en.wikipedia.org/wiki/Online_algorithm "Online algorithm"); i.e., can sort a list as it receives it
+
+---
+
+## Implementation (Java)
+``` java
+public static int[] sort (int[] arr) {  
+    int steps = 0;  
+ 	for(int m = 0; m < arr.length - 1; m ++ ){  
+        if(arr[m + 1] < arr[m]) {  
+            // m becomes the index at which the array is unsorted  
+ 			for (int i = m; i < arr.length - 1; i++) {  
+                if (arr[i + 1] < arr[i]) {  
+                    int _temp = arr[i + 1];  
+					arr[i + 1] = arr[i];  
+					arr[i] = _temp;  
+  
+			 		steps ++;  
+			 	}  
+            }  
+        }  
+    }  
+    System.out.println("InsertionSort Finished in: " \+ steps + " steps...");  
+ 	return arr;  
+}
+```
+
+## Complexity Analysis
+
+TODO...

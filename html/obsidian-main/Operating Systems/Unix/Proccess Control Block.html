@@ -1,0 +1,32 @@
+<!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+# Unix Process Control Block
+
+---
+### The Process Control Block
+
+![[2021-03-08-112349_515x371_scrot.png]]
+
+Each process is represented in the operating system by a process control block(PCB)  - also called a task control block. 
+
+A PCB is shown in the picture above. It contains many pieces of information associated with a specific process, including these:
+- Process state. The state may be new, ready, running, waiting, halted, and so on.
+- Program counter. The counter indicates the address of the next instructionto be executed for this process
+- CPU registers. The registers vary in number and type, depending on the computer architecture. They include accumulators, index registers, stackpointers, and general-purpose registers, plus any condition-code information. Along with the program counter, this state information must be saved when an interrupt occurs, to allow the process to be continued correctly afterward when it is rescheduled to run.
+- CPU scheduling information. This information includes a process priority, pointers to scheduling queues, and any other scheduling parameters.(Chapter 5 describes process scheduling.) 
+- Memory-management information. This information may include such items as the value of the base and limit registers and the page tables, or the segment tables, depending on the memory system used by the operating system (Chapter 9).
+- Accounting information. This information includes the amount of CPU and real time used, time limits, account numbers, job or process numbers,and so on.
+- I/O status information. This information includes the list of I/O devices allocated to the process, a list of open files, and so on.
+
+In brief, the PCB simply serves as the repository for all the data needed to start, or restart, a process, along with some accounting data.
+
+---
+
+### Threads
+
+Read more on Threads: [[Unix Concurency]]
+
+The process model discussed so far has implied that a process is a program that performs a single thread of execution. For example, when a process is running a word-processor program, a single thread of instructions is being executed.This single thread of control allows the process to perform only one task at a time. Thus, the user cannot simultaneously type in characters and run the spellchecker. 
+
+Most modern operating systems have extended the process concept to allow a process to have multiple threads of execution and thus to perform more than one task at a time. This feature is especially beneficial on multicore systems, where multiple threads can run in parallel. A multi threaded wordprocessor could, for example, assign one thread to manage user input while another thread runs the spell checker. 
+
+On systems that support threads, the PCB is expanded to include information for each thread. Other changes throughout the system are also needed to support threads. Chapter 4 explores threads in detail.

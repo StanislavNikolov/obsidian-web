@@ -1,0 +1,61 @@
+<!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+# Adaptive Bubble Sort
+
+*An extension of [[Bubble Sort]]*
+
+---
+
+## Table of Contents
+-	*[[#Efficiency Table]]*
+-	*[[#Definition]]*
+-	*[[#Implementation Java]]*
+-	*[[#Complexity Analysis]]*
+
+
+---
+
+## Efficiency Table
+|                      | Average             | Worst       | Best        |
+|----------------------|---------------------|-------------|-------------|
+| Bubble Sort          | O(N^2)              | O(N^2)      | O(N)        |
+| **Adaptive Bubble Sort** | NONE                | NONE        | NONE        |
+| Insertion Sort       | O(N^2)              | O(N^2       | O(N)        |
+| Selection Sort       | NONE                | NONE        | NONE        |
+| Heap Sort            | O(N.log(N))         | O(N.log(N)) | O(N.log(N)) |
+| Quick Sort           | O(N.log(N))         | O(N^2)      | O(N.log(N)) | 
+| Merge Sort           | O(N.log(N))         | O(n log(n)) | O(n log(n)) | 
+| Bucket Sort          | O(N+k)              | O(N^2)      | O(N+k)      | 
+| Radix Sort           | O(nk)               | O(nk)       | O(nk)       | 
+
+---
+
+## Definition
+A [sorting algorithm](https://en.wikipedia.org/wiki/Sorting_algorithm "Sorting algorithm") falls into the **adaptive sort** family if it takes advantage of existing order in its input. It benefits from the presortedness in the input sequence – or a limited amount of [disorder](https://en.wikipedia.org/wiki/Randomness "Randomness") for various definitions of measures of disorder – and sorts faster. Adaptive sorting is usually performed by modifying existing sorting algorithms. In this case [[Bubble Sort]].
+
+---
+
+## Implementation (Java)
+``` java
+public int[] sort(int arr[]) {  
+	Boolean sorted = false;
+    for(int m = 0; m < arr.length; m ++ ){
+        
+		if(sorted) break;
+		sorted = true;
+		
+		for (int i = arr.length - 1; i > m; i --){  
+            if (arr[i] < arr[i-1]){  
+                int _temp = arr[i];  
+ 				arr[i] = arr[i-1];  
+ 				arr[i-1] = _temp;
+				sorted = false;
+ 			}  
+        }  
+    }    
+    return arr;  
+}
+```
+
+## Complexity Analysis
+
+TODO...

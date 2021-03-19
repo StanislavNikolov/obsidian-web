@@ -1,0 +1,73 @@
+<!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+# Selection Sort
+
+---
+
+## Table of Contents
+-	*[[Selection Sort#Efficiency Table]]*
+-	*[[Selection Sort#Definition]]*
+-	*[[Selection Sort#Implementation Java]]*
+-	*[[Selection Sort#Complexity Analysis]]*
+
+
+---
+
+## Efficiency Table
+|                      | Average  | Worst    | Best    |
+|----------------------|----------|----------|---------|
+| Bubble Sort          | O(N ^ 2) | O(N ^ 2) | O(N ^ 2)|
+| Adaptive Bubble Sort | O(N)     | O(log N) | O(N)    |
+| Selection Sort       | O(1)     | O(N)     | O(N)    |
+|                      | O(N)     | O(N)     | O(N)    |
+|                      | O(log N) | O(log N) | O(log N)| 
+
+---
+
+## Definition
+Selection sort is the simplest algorithm one can imagine.
+
+---
+
+## Implementation (Java)
+Steps:
+-	Index *i* keeps track of the right boundary of the sorted portion
+	-	points to the next unsorted element
+-	Find the minimum m of the unsorted subarray (from i onwards)
+	-	Takes O(N) iterations inner loop
+-	Swap m with A[i]
+	-	O(1)
+-	Increment i, untill reached the last element
+	-	Takes O(N) iterations outer loop
+
+
+
+``` java
+public static int[] sort (int[] arr) {  
+    int steps = 0;  
+ 	for(int m = 0; m < arr.length - 1; m ++ ){  
+        if(arr[m + 1] < arr[m]) {  
+            // m becomes the index at which the array is unsorted  
+ 			for (int i = m; i < arr.length - 1; i++) {  
+                if (arr[i + 1] < arr[i]) {  
+                    int _temp = arr[i + 1];  
+					arr[i + 1] = arr[i];  
+					arr[i] = _temp;  
+  
+			 		steps ++;  
+			 	}  
+            }  
+        }  
+    }  
+    System.out.println("InsertionSort Finished in: " \+ steps + " steps...");  
+ 	return arr;  
+}
+```
+
+## Complexity Analysis
+
+-	Inner loop is impossible to optimise
+	-	Always need number of comparisons ~ the length of the unsorted chunk to find the minumum
+-	But never need more than N swaps! (Not many algorithms have this little swaps)
+-	Best, Average, Worst case
+	-	Comparisons ~(N^2)/2; Swaps: ~N
+-	Worst case asymptotic (comparisons): O(N^2)

@@ -1,0 +1,41 @@
+<!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+# Unix Kernel
+
+
+---
+## The Kernel
+
+![[kernel.jpeg]]
+
+### Utilising Hardware Resources
+- Hardware supports
+	- Basic instruction execution
+	- Interrupt handling
+	- Basic Memory addressing mechanisms
+	- User / Kernel mode operation for protecting resources
+	- Process management
+	- Virtual memory management
+	- File storage and communication management
+
+### System Calls
+- System calls are the only entry point into the kernel
+- Categories:
+	- Process control
+	- File management
+	- Device management
+	- Communication
+	- Information maintanance
+	- Protection
+- System calls are executed in **kernel** mode
+
+### Protecting the Operating System
+- **User Mode**:
+	- User programs execute in user mode
+	- Certain areas are protected from user access
+	- Certain instructions may not be executed
+- **Kernel Mode**:
+	- Operating System executes in **kernel mode**
+	- Privilidged instructions may be executed
+	- Protected areas of memory may be accessed
+
+

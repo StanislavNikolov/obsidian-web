@@ -1,0 +1,3 @@
+[submodule "md/obsidian-main"]
+	path = md/obsidian-main
+	url = https://github.com/martinteoharov/obsidian-main
