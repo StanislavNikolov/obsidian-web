@@ -1,142 +1,290 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # Chapter 1: Functions Intro
+ 
 
+ 
 #calculus_for_scientists_and_engineers 
+ 
 
+ 
 https://notes.martinteoharov.com/books/Calculus-For-Scientists-and-Engineers.pdf
+ 
 
+ 
 This note is based on the first chapter of the book "Calculus for Scientists and Engineers".
+ 
 
+ 
 # Definition:
+ 
 
+ 
 ---
+ 
 
+ 
 > A function f is a rule that assigns to each value x in a set D a ***unique*** value denoted f(x) . The set D is the **domain** of the function. The **range** is the set of all values of f(x) produced as x varies over the domain.
+ 
 
+ 
 # Basic Concepts:
+ 
 
+ 
 ---
+ 
 
+ 
 ### Vertical Line Test:
+ 
 
+ 
 - Definition
+ 
 
+ 
     A graph represents a function if and only if it passes the vertical line test: Every vertical line intersects the graph at most once. A graph that fails this test does not represent a function.
+ 
 
+ 
 - Image
+ 
+2021-02-09-084218_756x521_scrot.png
 	 ![[2021-02-09-084218_756x521_scrot.png]]
+ 
 
+ 
 
+ 
 
+ 
 ### Domain & Range:
+ 
 
+ 
 - Image Quadratic
+ 
+2021-02-09-084712_755x523_scrot.png
 ![[2021-02-09-084712_755x523_scrot.png]]
+ 
 - Image Reverse
+ 
     - *Domain: [-2, 2]*
+ 
     - *Range: [0, 2]*
+ 
+2021-02-09-085105_754x522_scrot.png
 ![[2021-02-09-085105_754x522_scrot.png]]
+ 
 - Image w = 1/(u-1)
+ 
     - *Domain: (-inf; 1) U (1; +inf)*
+ 
     - *Range: (-inf; 0) U (0; +inf)*
+ 
+2021-02-09-085350_756x525_scrot.png
 ![[2021-02-09-085350_756x525_scrot.png]]
+ 
     
+ 
 
+ 
 ### Composite Functions *f* ∘ *g*:
+ 
 
+ 
 - Definition
+ 
 
+ 
     Given two functions *f* and *g*, the composite function  *f* ∘*g* is defined by ( *f* ∘ *g* ) ( ***x*** ) = *f* ( *g* ( ***x*** ) ). It is evaluated in two steps: y = *f* ( ***u*** ), where u = *g* ( ***x*** ). The domain of *f* ∘ *g* consists of all **x** in the **domain** of *g* such that *u* = *g*(**x**) is in the **domain** of *f*.
+ 
 
+ 
 - Image
+ 
+2021-02-09-090315_758x523_scrot.png
 	![[2021-02-09-090315_758x523_scrot.png]]
+ 
    
+ 
 - Questions
+ 
     - What is the relation between the domain of *g* (**x**) and the domain of *f ∘ g* (**x**)?
+ 
 
+ 
         The Domain of *g* (**x**) contains the domain of *f ∘ g* (**x**)
+ 
 
+ 
 ### Slope of a Linear Function:
+ 
 
+ 
 - Purposes
+ 
 
+ 
     The rate of growth of a function and the slope of a line tangent to a curve are unseemly connected.
+ 
 
+ 
 - Definition
+ 
 
+ 
     The steepness of a hill is called a slope. The same goes for the steepness of a line. The slope is defined as the ratio of the vertical change between two points, the rise, to the horizontal change between the same two points, the run.
+ 
 
+ 
 - Formula
+ 
 
+ 
     The slope of a line is usually represented by the letter m. (x1, y1) represents the first point whereas (x2, y2) represents the second point.
+ 
 
+ 
     **To find the slope**:   *m = (y2 - y1)/(x2 - x1)*
+ 
 
+ 
 - Image Formula
+ 
+2021-02-09-143518_476x414_scrot.png
 	![[2021-02-09-143518_476x414_scrot.png]]
+ 
    
+ 
 
+ 
 - Example
+ 
+2021-02-09-143944_308x301_scrot.png
 	![[2021-02-09-143944_308x301_scrot.png]]
+ 
   
+ 
 
+ 
     Ans:     *m = (y2 - y1)/(x2 - x1) = (2 - (-2)) / (2 - (-3)) = 4 / 5*
+ 
 
+ 
 ### Reverse Engineering a Linear Function:
+ 
 
+ 
 - Method
+ 
 
+ 
     The slope of a linear function is the same at every point. We can use this property of the slope to reverse engineer the function. First we find the slope and then compare it to a different slope that uses f(x) and x as variables instead of constants.
+ 
 
+ 
 - Image
+ 
 
+ 
 
+ 
 
+ 
 ### Symmetry in Graphs:
+ 
 
+ 
 - Symmetric with respect to the y-axis:
+ 
     - Definition
+ 
 
+ 
         If whenever the point (x, y) is on the graph, the point (-x, y) is also on the graph. The property means that the graph is unchanged when reflected about the y-axis
+ 
 
+ 
     - Image
+ 
 
+ 
        
+ 
 
+ 
 - Symmetric with respect to the x-axis:
+ 
     - Definition
+ 
 
+ 
         A graph is symmetric with respect to the x-axis if whenever the point (x, y) is on the graph, the point (x, -y) is also on the graph. This property means that the graph is unchanged when reflected about the x-axis.
+ 
 
+ 
         Which obviously makes it **not** a function..
+ 
 
+ 
     - Image
+ 
 
+ 
        
+ 
 - Symmetric with respect to the origin:
+ 
     - Definition
+ 
 
+ 
         A graph is symmetric with respect to the origin if for every (x, y), the point (-x, -y) is also on the graph. Symmetry about both the x and y-axes implies symmetry about the origin, but not vice versa.
+ 
 
+ 
     - Image
+ 
 
+ 
        
+ 
 ### Odd & Even Functions:
+ 
 
+ 
 - Even Function
+ 
     - Definition
+ 
 
+ 
         An even function has the property *f*(-x) = *f*(x), for all x in the domain. The graph of an even function is symmetric about the y-axis. Polynomials consisting of only even powers of the variable (of the form x^2n for example: $x^2, x^4, x^6...$)
+ 
 
+ 
     - Image
+ 
 
+ 
        
+ 
 
+ 
 - Odd Function
+ 
     - Definition
+ 
 
+ 
         An odd function *f* has the property that f(-x) = -f(x)  (meaning f(x, y), then there is f(-x, -y)), for all x in the domain. The graph of an odd function is symmetric about the origin. Polynomials consisting of only odd powers of the variable (of the form x^(2n +1), where n is a non negative integer) are odd functions.
+ 
 
+ 
     - Image
+ 
 
-        
+ 
+         

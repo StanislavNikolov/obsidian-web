@@ -1,53 +1,112 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # Bubble Sort
+ 
 
+ 
 ---
+ 
 
+ 
 ## Table of Contents
+ 
+#Efficiency Table
 -	*[[#Efficiency Table]]*
+ 
+#Definition
 -	*[[#Definition]]*
+ 
+#Implementation Java
 -	*[[#Implementation Java]]*
+ 
+#Complexity Analysis
 -	*[[#Complexity Analysis]]*
+ 
 
+ 
 
+ 
 ---
+ 
 
+ 
 ## Efficiency Table
+ 
+
+ 
 |                      | Average             | Worst       | Best        |
+ 
 |----------------------|---------------------|-------------|-------------|
+ 
 | **Bubble Sort**      | O(N^2)              | O(N^2)      | O(N)        |
+ 
 | Adaptive Bubble Sort | NONE                | NONE        | NONE        |
+ 
 | Insertion Sort       | O(N^2)              | O(N^2       | O(N)        |
+ 
 | Selection Sort       | NONE                | NONE        | NONE        |
+ 
 | Heap Sort            | O(N.log(N))         | O(N.log(N)) | O(N.log(N)) |
+ 
 | Quick Sort           | O(N.log(N))         | O(N^2)      | O(N.log(N)) | 
+ 
 | Merge Sort           | O(N.log(N))         | O(n log(n)) | O(n log(n)) | 
+ 
 | Bucket Sort          | O(N+k)              | O(N^2)      | O(N+k)      | 
+ 
 | Radix Sort           | O(nk)               | O(nk)       | O(nk)       | 
+ 
 
+ 
 ---
+ 
 
+ 
 ## Definition
+ 
 **Bubble sort**, sometimes referred to as **sinking sort**, is a simple [sorting algorithm](https://en.wikipedia.org/wiki/Sorting_algorithm "Sorting algorithm") that repeatedly steps through the list, compares adjacent elements and [swaps](https://en.wikipedia.org/wiki/Swap_(computer_science) "Swap (computer science)") them if they are in the wrong order. The pass through the list is repeated until the list is sorted. The algorithm, which is a [comparison sort](https://en.wikipedia.org/wiki/Comparison_sort "Comparison sort"), is named for the way smaller or larger elements "bubble" to the top of the list.
+ 
 
+ 
 ---
+ 
 
+ 
 ## Implementation (Java)
+ 
 ``` java
+ 
 public int[] sort(int arr[]) {  
+ 
     for(int m = 0; m < arr.length; m ++ ){  
+ 
         for (int i = arr.length - 1; i > m; i --){  
+ 
             if (arr[i] < arr[i-1]){  
+ 
                 int _temp = arr[i];  
+ 
  				arr[i] = arr[i-1];  
+ 
  				arr[i-1] = _temp;  
+ 
  			}  
+ 
         }  
+ 
     }    
+ 
     return arr;  
+ 
 }
+ 
 ```
+ 
 
+ 
 ## Complexity Analysis
+ 
 
+ 
 TODO...
+ 

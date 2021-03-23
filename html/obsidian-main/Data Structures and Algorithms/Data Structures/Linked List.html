@@ -1,37 +1,76 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # Data Structures / Linked List
+ 
 
+ 
 ## Table of Contents
+ 
+#Definition
 -	[[#Definition]]
+ 
+#Efficiency
 -	[[#Efficiency]]
+ 
 
+ 
 ---
+ 
 ## Definition
+ 
 
+ 
 A linked list is a linear data structure, in which the elements are not stored at contiguous(meaning next to one another) memory locations. The elements in a linked list are linked using pointers as shown in the below image:
+ 
 
+ 
+test.png
 ![[test.png]]
+ 
 
+ 
 In simple words, a linked list consists of nodes where each node contains a data field and a reference(link) to the next node in the list.
+ 
 
+ 
 ---
+ 
 
+ 
 ## Efficiency
+ 
 |                    | Add      | Search   | Delete  | Min/Max  |
+ 
 |--------------------|----------|----------|---------|----------|
+ 
 | Array              | O(N)     | O(log N) | O(N)    | O(N)     |
+ 
 | Sorted Array       | O(N)     | O(log N) | O(N)    | O(1)     |
+ 
 | **Linked List**    | O(1)     | O(N)     | O(N)    | O(N)     |
+ 
 | Sorted Linked List | O(N)     | O(N)     | O(N)    | O(1)     |
+ 
 | Binary Search Tree | O(log N) | O(log N) | O(log N)| O(log N) | 
+ 
 
+ 
 ## Implementation
+ 
 ```java
+ 
 public class Node {  
+ 
 	Node next;  
+ 
 	int data;
+ 
 	public Node(int data){  
+ 
   		this.data = data;  
+ 
  	}  
+ 
 }
-```
+ 
+``` 

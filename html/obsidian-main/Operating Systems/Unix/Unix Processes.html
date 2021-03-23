@@ -1,76 +1,159 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # Unix Processes
+ 
 
+ 
 Everything in UNIX-like operating systems is either a file or a process.
+ 
 
+ 
 A process is a program in execution. 
+ 
 
+ 
 A process will need certain resources — such as CPU time, memory, files, and I/O devices — to accomplish its task. These resources are typically allocated to the process while it is executing. 
+ 
 
+ 
 A process is the unit of work in most systems. Systems consist of a collection of processes: operating-system processes execute system code, and user processes execute user code. 
+ 
 
+ 
 All these processes may execute concurrently. Modern operating systems support processes having multiple threads of control. On systems with multiple hardware processing cores, these threads can run in parallel.
+ 
 
+ 
 One of the most important aspects of an operating system is how it schedules threads onto available processing cores. Several choices for designing CPU schedulers are available to programmers.
+ 
 
+ 
 ---
+ 
 
+ 
 ## Table of Contents
+ 
 -	How processes work?
+ 
+#Process Creation Lifecycle
 	-	[[#Process Creation Lifecycle]]
+ 
+#Process Scheduling
 	-	[[#Process Scheduling]]
+ 
 -	Different types of processes:
+ 
+#Parent and Child Processes
 	-	[[#Parent and Child Processes]]
+ 
+#Orphans and Zombie Processes
 	-	[[#Orphans and Zombie Processes]]
+ 
+#Daemon Processes
 	-	[[#Daemon Processes]]
+ 
 
+ 
 ---
+ 
 
+ 
 ## How processes work
+ 
 
+ 
 
+ 
 ### *Process Creation & Lifecycle*
+ 
 
+ 
+ProcessStateDiagram.png
 ![[ProcessStateDiagram.png]]
+ 
 
+ 
 -	State "New": Process is created, but not yet admitted to the pool of executable processes by the Operating System
-	-	[[Proccess Control Block]] created.
+ 
+Proccess Control Block
+	-	<a href="/obsidian-main/Operating Systems/Unix/Proccess Control Block.html">Proccess Control Block</a> created.
+ 
 	-	Program may not be loaded yet into main memory.
+ 
 -	Assign unique process identifier (PID) to the newly created process (and a PPID if the process is a *child process*)
+ 
 -	Initialize the Process Control Block.
+ 
 -	Allocate memory for process image (program, data, stack)
+ 
 -	Load program
+ 
 -	Add process to the Ready Queue
+ 
 
+ 
 
+ 
 ### *Process Scheduling*
-Read more about **unix concurency** [[Unix Concurency]]
+ 
+Unix Concurency
+Read more about **unix concurency** <a href="/obsidian-main/Operating Systems/Unix/Unix Concurency.html">Unix Concurency</a>
+ 
 
+ 
 The objective of multi programming is to have some process running at all times so as to maximize CPU utilization. The objective of time sharing is to switch a CPU core among processes so frequently that users can interact with each program while it is running. To meet these objectives, the process scheduler selects an available process (possibly from a set of several available processes) for program execution on a core. Each CPU core can run one process at a time.
+ 
 
+ 
 For a system with a single CPU core, there will never be more than one process running at a time, whereas a multicore system can run multiple processes at one time. If there are more processes than cores, excess processes will have to wait until a core is free and can be rescheduled. 
+ 
 
+ 
 The number of processes currently in memory is known as **the degree of multiprogramming** . Balancing the objectives of multiprogramming and time sharing also requires taking the general behavior of a process into account. In general, most processes can be described as either I/O bound or CPU bound. An I/O bound process is one that spends more of its time doing I/O than it spends doing computations. A CPU bound process, in contrast, generates I/O requests infrequently, using more of its time doing computations.
+ 
 
+ 
 ---
+ 
 ## Types of Processes
+ 
 
+ 
 ### *Parent and Child Processes: *
+ 
 Each unix process has two ID numbers assigned to it: The Process ID (pid) and the Parent process ID (ppid). Each user process in the system has a parent process.
+ 
 
+ 
 
+ 
 ### *Orphans and Zombie Processes*
+ 
 Normally, when a child process is killed, the parent process is updated via a **SIGCHLD** signal. Then the parent can do some other task or restart a new child as needed. However, sometimes the parent process is killed before its child is killed. In this case, the "parent of all processes," the **init** process, becomes the new PPID (parent process ID). In some cases, these processes are called orphan processes.
+ 
 
+ 
 When a process is killed, a **ps** listing may still show the process with a **Z** state. This is a zombie or defunct process. The process is dead and not being used. These processes are different from the orphan processes. They have completed execution but still find an entry in the process table.\
+ 
 
+ 
 ### *Daemon Processes*
+ 
 Daemons are system-related background processes that often run with the permissions of root and services requests from other processes.
+ 
 
+ 
 A daemon has no controlling terminal. It cannot open **/dev/tty**. If you do a **"ps -ef"** and look at the **tty** field, all daemons will have a **?** for the **tty**.
+ 
 
+ 
 To be precise, a daemon is a process that runs in the background, usually waiting for something to happen that it is capable of working with. For example, a printer daemon waiting for print commands.
+ 
 
+ 
 If you have a program that calls for lengthy processing, then it’s worth to make it a daemon and run it in the background.
+ 
 
----
+ 
+--- 

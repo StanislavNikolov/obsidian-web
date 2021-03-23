@@ -1,6 +1,6 @@
 "use strict;"
 
-import Renderer from './Renderer.js';
+import Renderer from './Renderer.mjs';
 
 // Setup
 const canvasDOM = document.getElementById('canvas');
@@ -9,6 +9,7 @@ canvasDOM.height = window.innerHeight;
 const ctx = canvas.getContext('2d');
 
 const scene = new Renderer.Scene(ctx);
+
 
 // Generate sample Nodes
 (() => {

@@ -1,99 +1,205 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # Data Structures / Binary Search Tree (BST)
+ 
 \**Everything here assumes the BST is balanced*
+ 
 
+ 
 ## Table of contents
+ 
+#Efficiency Table
 -	*[[#Efficiency Table]]*
+ 
+#Definition
 -	*[[#Definition]]*
+ 
+#Representing BST
 -	*[[#Representing BST]]*
+ 
+#Searching for a key in a BST Algorithm recursive
 -	*[[#Searching for a key in a BST Algorithm recursive]]*
+ 
+#Add a data object with key k
 -	*[[#Add a data object with key k]]*
+ 
+#Delete a key
 -	*[[#Delete a key]]*
+ 
 
+ 
 ---
+ 
 ## Efficiency Table
+ 
 |                        | Add      | Search   | Delete  | Min/Max  |
+ 
 |------------------------|----------|----------|---------|----------|
+ 
 | Array                  | O(N)     | O(log N) | O(N)    | O(N)     |
+ 
 | Sorted Array           | O(N)     | O(log N) | O(N)    | O(1)     |
+ 
 | Linked List            | O(1)     | O(N)     | O(N)    | O(N)     |
+ 
 | Sorted Linked List     | O(N)     | O(N)     | O(N)    | O(1)     |
+ 
 | **Binary Search Tree** | O(log N) | O(log N) | O(log N)| O(log N) | 
+ 
 
+ 
 ---
+ 
 ## Definition
+ 
 A BST is a **Rooted binary tree** satisfying the **search tree property**.
+ 
 
+ 
 **Rooted Binary Tree**: 
+ 
 -	Has a single distinguished **root** node
+ 
 -	Has an orientation outward/toward the root
+ 
 -	Nodes pointed by a node X in the direction outward the root are children of X
+ 
 -	The node pointed by X in the direction toward the root is the parent of X
+ 
 -	Each node has at most 2 children (this is why the tree is binary)
+ 
 
+ 
 **Search Tree Property**:
+ 
 -	For **every** node X:
+ 
 	-	All data items (keys) in X's left subtree have smaller values than the data item (key) in X
+ 
 	-	all data items (keys) in X's right subtree have larger values than the data item (key) in X
+ 
 
+ 
+2021-03-02-105540_1105x403_scrot.png
 ![[2021-03-02-105540_1105x403_scrot.png]]
+ 
 
+ 
 **Properties**:
+ 
 -	$$ Tree Height = log_{2}N $$
+ 
 ---
+ 
 
+ 
 ## Representing BST
+ 
 
+ 
 -	Most basic representation
+ 
 	-	left (right) is null if no left (right) child
+ 
 	-	Data items must be comparable
+ 
 
+ 
 _ **Note**: There also may be a pointer to a parent node but in this case we are not considering it_
+ 
 
+ 
 ``` Java
+ 
 public class BSTNode {
+ 
 	private int data; // key
+ 
 	private BSTNode left; // pointing to a BSTNode
+ 
 	private BSTNode right; // pointing to a BSTNode
+ 
 	
+ 
 	/*
+ 
 		constructor and
+ 
 		get/set methods for the 
+ 
 		fields
+ 
 	*/
+ 
 }
+ 
 ```
+ 
 ---
+ 
 
+ 
 ## Searching for a key in a BST: Algorithm (recursive)
+ 
 Find a data object associated with a key k
+ 
 -	Traverse tree recursively starting at the root
+ 
 -	Base case:
+ 
 	-	if current node is NULL, return NULL
+ 
 -	Recursive case:
+ 
 	-	if k = *key* at current node, return data
+ 
 	-	if k < *key* at current node, traverse **left**
+ 
 	-	if k > *key* at current node, traverse **right**
+ 
 
+ 
 ``` python
+ 
 def search(k, node):  
+ 
     if (node.data == None):  
+ 
         return None  
+ 
   
+ 
  if (node.data == k):  
+ 
      return node.data  
+ 
  elif (k < node.data):  
+ 
      return search(k, node.left)  
+ 
  elif (k > node.data):  
+ 
      return search(k, node.right)
+ 
 ```
+ 
 
+ 
 ---
+ 
 ## Add a data object with key k
+ 
 -	Repeat the same steps as in search for k
+ 
 -	Rewire final NULL pointer to point ot new node with key k
+ 
 
+ 
 ---
+ 
 ## Delete a key 
+ 
 **TODO**
+ 
 
+ 

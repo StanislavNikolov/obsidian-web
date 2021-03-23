@@ -1,80 +1,165 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # Data Structures / Priority Queue
+ 
 
+ 
 ## Table of contents
+ 
+Priority Queue#Efficiency Table
 -	*[[Priority Queue#Efficiency Table]]*
+ 
+Priority Queue#Definition
 -	*[[Priority Queue#Definition]]*
+ 
+Priority Queue#Interface
 -	*[[Priority Queue#Interface]]*
+ 
+Priority Queue#Applications
 -	*[[Priority Queue#Applications]]*
+ 
+Priority Queue#Can we use BST to implement PQ
 -	*[[Priority Queue#Can we use BST to implement PQ]]*
+ 
+Priority Queue#Implementation
 -	*[[Priority Queue#Implementation]]*
+ 
 
+ 
 ---
+ 
 ## Efficiency Table
+ 
 |                        | Add      | Search   | Delete  | Min/Max  |
+ 
 |------------------------|----------|----------|---------|----------|
+ 
 | Array                  | O(N)     | O(log N) | O(N)    | O(N)     |
+ 
 | Sorted Array           | O(N)     | O(log N) | O(N)    | O(1)     |
+ 
 | Linked List            | O(1)     | O(N)     | O(N)    | O(N)     |
+ 
 | Sorted Linked List     | O(N)     | O(N)     | O(N)    | O(1)     |
+ 
 | **Binary Search Tree** | O(log N) | O(log N) | O(log N)| O(log N) | 
+ 
 
+ 
 ---
+ 
 ## Definition
+ 
 Priority Queue: remove the largest (or smallest) item
+ 
 -	Like sorting, but dynamic
+ 
 
+ 
 ---
+ 
 ## Interface
+ 
 - Max:
+ 
 	-	insert(x): insert item *x* into PQ
+ 
 	-	getMax(): return the maximum item in PQ
+ 
 	-	deleteMax(): delete the maximum item from the PQ (normally would also return the deleted item)
+ 
 - Min:
+ 
 	-	insert(x): insert item *x* into PQ
+ 
 	-	getMin(): return the minimum item in PQ
+ 
 	-	deleteMin(): delete the minimum item from the PQ  (normally would also return the deleted item)
+ 
 ---
+ 
 
+ 
 ## Applications
+ 
 - Event-driven simulation. (customer in a line, colliding particles)
+ 
 - Numerical Computation (reducing roundoff error)
+ 
 - Discrete Optimization (bin packing, scheduling)
+ 
 - Artificial Intelligence (A* search)
+ 
 - Computer Networks (web cache)
+ 
 - Operating Systems (load balancing, interrupt handling)
+ 
 - Data compression (Huffman codes)
+ 
 - Graph searching (Dijkstra's algorithm, Prim's algorithm)
+ 
 - Number Theory (sum of powers)
+ 
 - Spam filtering (Bayesian spam filter)
+ 
 - Statistics (online median in data stream)
+ 
 
+ 
 ### Example: Task Scheduler
+ 
 **Aim:**
+ 
 - Want to schedule tasks with specific deadlines
+ 
 - Whenever the deadline for a task is close, display a reminder
+ 
 
+ 
 **Execution**:
+ 
 - Use Min PQ to store tasks ordered by the reminder deadlines
+ 
 - To schedule a task T:
+ 
 	- Insert T into the Min PQ with deadline (T) as key (insert)
+ 
 - Whenever a new task is scheduled:
+ 
 	- Get the task with the min deadline from PQ (getMin()), start a timer for delta = (minDeadline - now)
+ 
 - Whenever the timer expires:
+ 
 	- Get the task T with the min deadline from PQ (getMin)
+ 
 	- Display a reminder for T
+ 
 	- Delte the task with the min deadline from PQ (dealeteMin)
+ 
 	- Get the task with min deadline from PQ (getMin), start a timer for 
+ 
 	- delta = (minDeadline - now)
+ 
 
+ 
 ## Can we use BST to implement PQ?
+ 
 -	Yes, but...
+ 
 -	Requires a linked data representation (tree data structure)
+ 
 	-	Extra space per item to store right/left pointers
+ 
 		-	parent pointer is also needed for some algorithms
+ 
 	-	Relatively complex tree restructure code, especially for deletion
+ 
 -	Tree must be kept balanced for efficiency
+ 
 	-	Requires sophisticated rebalancing mechanisms to ensure basic operations run in O(log N) in the worst case
+ 
 -	Optimized for manipulating arbitrary keys
+ 
 
-## Implementation
+ 
+## Implementation 

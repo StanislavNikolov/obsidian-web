@@ -1,67 +1,142 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # UNIX
+ 
 
+ 
 This file contains a table of contents of the topics in the folder for UNIX.
+ 
 
+ 
 ---
+ 
 ### Table of contents:
+ 
 -	** Kernel **:
+ 
+Unix Kernel#Unix Kernel
 	-	[[Unix Kernel#Unix Kernel]]
+ 
 -	** Processes **:
+ 
 	-	How do processes work?
+ 
+Unix Processes#Process Creation Lifecycle
 		-	[[Unix Processes#Process Creation Lifecycle]]
+ 
+Unix Processes#Process Scheduling
 		-	[[Unix Processes#Process Scheduling]]
+ 
 	-	Different types of processes:
+ 
+Unix Processes#Parent and Child Processes
 		-	[[Unix Processes#Parent and Child Processes]]
+ 
+Unix Processes#Orphans and Zombie Processes
 		-	[[Unix Processes#Orphans and Zombie Processes]]
+ 
+Unix Processes#Daemon Processes
 		-	[[Unix Processes#Daemon Processes]]
+ 
 -	** Threads & Concurency**:
-	-	[[Unix Concurency]]
+ 
+Unix Concurency
+	-	<a href="/obsidian-main/Operating Systems/Unix/Unix Concurency.html">Unix Concurency</a>
+ 
 -	TODO: ** Pipes **
+ 
 -	TODO: ** Round robin **
+ 
 ---
+ 
 
+ 
 ## What is UNIX:
+ 
 Old artifact from Surrey :), ~October 2000 
+ 
 http://www.ee.surrey.ac.uk/Teaching/Unix/unixintro.html
+ 
 
+ 
 **UNIX** is an operating system which was first developed in the **1960s**, and has been under constant development ever since. By operating system, we mean the suite of programs which make the computer work. It is a stable, multi-user, multi-tasking system for servers, desktops and laptops.
+ 
 
+ 
 **UNIX** systems also have a graphical user interface (GUI) similar to Microsoft Windows which provides an easy to use environment. However, knowledge of UNIX is required for operations which aren't covered by a graphical program, or for when there is no windows interface available, for example, in a *telnet session*.
+ 
 
+ 
 ## Types of Unix 
+ 
 ![The Linux Penguin](http://www.ee.surrey.ac.uk/Teaching/Unix/media/linux-penguin-small.png)
+ 
 
+ 
 There are many different versions of UNIX, although they share common similarities. The most popular varieties of UNIX are Sun Solaris, GNU/Linux, and MacOS X.
+ 
 
+ 
 ## The Unix Operating System
+ 
 The UNIX operating system is made up of three parts; the kernel, the shell and the programs.
+ 
 
+ 
 ### The Kernel
+ 
 
-Read more: [[Unix Kernel]]
+ 
+Unix Kernel
+Read more: <a href="/obsidian-main/Operating Systems/Unix/Unix Kernel.html">Unix Kernel</a>
+ 
 
+ 
 The kernel of UNIX is the hub of the operating system: it allocates time and memory to programs and handles the filestore and communications in response to system calls.
+ 
 
+ 
 As an illustration of the way that the shell and the kernel work together, suppose a user types rm myfile (which has the effect of removing the file **myfile**). The shell searches the filestore for the file containing the program rm, and then requests the kernel, through system calls, to execute the program rm on **myfile**. When the process rm myfile has finished running, the shell then returns the UNIX prompt % to the user, indicating that it is waiting for further commands.
+ 
 
+ 
 ### The Shell
+ 
 The shell acts as an interface between the user and the kernel. When a user logs in, the login program checks the username and password, and then starts another program called the shell. The shell is a command line interpreter (CLI). It interprets the commands the user types in and arranges for them to be carried out. The commands are themselves programs: when they terminate, the shell gives the user another prompt (% on our systems).
+ 
 
+ 
 
+ 
 ### Files and Processes
+ 
 
-Read more: [[Unix Processes]]
+ 
+Unix Processes
+Read more: <a href="/obsidian-main/Operating Systems/Unix/Unix Processes.html">Unix Processes</a>
+ 
 
+ 
 Everything in UNIX is either a file or a process.
+ 
 
+ 
 A process is an executing program identified by a unique PID (process identifier).
+ 
 
+ 
 A file is a collection of data. They are created by users using text editors, running compilers etc.
+ 
 
+ 
 Examples of files:
+ 
 
+ 
 -   a document (report, essay etc.)
+ 
 -   the text of a program written in some high-level programming language
+ 
 -   instructions comprehensible directly to the machine and incomprehensible to a casual user, for example, a collection of binary digits (an executable or binary file);
--   a directory, containing information about its contents, which may be a mixture of other directories (subdirectories) and ordinary files.
+ 
+-   a directory, containing information about its contents, which may be a mixture of other directories (subdirectories) and ordinary files. 

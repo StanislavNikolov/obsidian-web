@@ -9,7 +9,18 @@ class Scene {
     static links = [];
 
     // pos: obj {x, y}, attached: obj (Node), held: boolean
-    static mouse = { pos: { x: null, y: null }, attached: null, held: false };
+    static mouse = {
+        pos: {
+            x: null,
+            y: null,
+        },
+        pos_last: {
+            x: 0,
+            y: 0
+        },
+        attached: null,
+        held: false,
+    };
 
     static ctx = null;
 
@@ -18,18 +29,21 @@ class Scene {
         // setup canvas event listeners
         canvas.addEventListener('mousedown', (e) => { 
             Scene.mouse.held = true;
+            Scene.mouse.pos_last.x = ctx.offsetX;
+            Scene.mouse.pos_last.y = ctx.offsetY;
          }, false);
 
         canvas.addEventListener('mouseup', (e) => { 
             Scene.mouse.held = false;
             Scene.mouse.pos = { x: null, y: null };
+            Scene.mouse.pos_last = { x: null, y: null };
             Scene.mouse.attached = null;
         }, false);
         canvas.addEventListener('mousemove', (e) => {
-            Scene.mouse.pos.x = e.offsetX;
-            Scene.mouse.pos.y = e.offsetY
+            if (Scene.mouse.held) {
+                Scene.mouse.pos.x = e.offsetX;
+                Scene.mouse.pos.y = e.offsetY
 
-            if (Scene.mouse.held && !Scene.mouse.attached) {
                 // Detect click on node
                 for(const node of Scene.nodes){
                     const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Scene.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Scene.mouse.pos.y), 2));
@@ -37,16 +51,36 @@ class Scene {
                         node.onclick();
                     } 
                 }
+
+                if(!Scene.mouse.attached) {
+                    // move map
+                    const diffX = Scene.mouse.pos.x - Scene.mouse.pos_last.x;
+                    const diffY = Scene.mouse.pos.y - Scene.mouse.pos_last.y;
+
+                    // translate all elements
+                    for(const node of Scene.nodes){
+                        node.translate(diffX, diffY)
+                    }
+                }
+
+                Scene.mouse.pos_last.x = Scene.mouse.pos.x;
+                Scene.mouse.pos_last.y = Scene.mouse.pos.y;
             }
         }, false);
         canvas.addEventListener('wheel', (e) => {
             e.preventDefault();
             if(e.deltaY > 0){
                 // zoom out
-                ctx.scale(0.95, 0.95);
+                // ctx.scale(0.95, 0.95);
+                for(const node of Scene.nodes){
+                    node.scale(0.95);
+                }
             } else {
                 // zoom in
-                ctx.scale(1.05, 1.05);
+                // ctx.scale(1.05, 1.05);
+                for(const node of Scene.nodes){
+                    node.scale(1.05);
+                }
             }
             
 
@@ -74,7 +108,6 @@ class Scene {
  *
  */
 class Node {
-
     path       = null;
     filename   = null;
     pos        = null;
@@ -104,6 +137,33 @@ class Node {
     onclick() {
         Scene.mouse.attached = this;
     }
+
+	draw(ctx){
+        ctx.beginPath();
+        ctx.fillStyle = this.appearance.color;
+
+        ctx.arc(this.pos.x, this.pos.y, this.pos.r, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.closePath();
+	}
+
+    translate(x, y) {
+        if(!isNaN(x))
+            this.pos.x += x;
+        
+        if(!isNaN(y))
+            this.pos.y += y;
+    }
+
+    scale(val) {
+        if (!isNaN(val)){
+            this.pos.r *= val;
+			this.pos.x *= val;
+			this.pos.y *= val;
+		}
+    }
 }
 
 /*
@@ -114,27 +174,11 @@ const Render = () => {
     const width = canvasDOM.width;
     const height = canvasDOM.height;
 
-    ctx.fillStyle = "#424242";
+    ctx.fillStyle = "gray";
     ctx.fillRect(0, 0, width, height);
 
     for(const node of Scene.nodes){
-        ctx.beginPath();
-
-        ctx.fillStyle = node.appearance.color.basic;
-        ctx.strokeStyle = node.appearance.color.basic;
-        if(Scene.mouse.attached == node){
-            ctx.strokeStyle = node.appearance.color.selected;
-            ctx.fillStyle = node.appearance.color.selectedFill;
-        }
-
-        ctx.arc(node.pos.x, node.pos.y, node.pos.r, 0, 2 * Math.PI);
-        ctx.font = "20px Arial";
-        ctx.fillText(node.filename, node.pos.x - 20, node.pos.y + node.pos.r * 2);
-        
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.closePath();
+		node.draw(ctx);
     }
 }
 

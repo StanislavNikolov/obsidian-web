@@ -1,73 +1,151 @@
 <!DOCTYPE html><script src='https://cdn.jsdelivr.net/npm/texme@0.9.0'></script><textarea>
+ 
 # Data Structures / Heap
+ 
 
+ 
 ## Table of contents
+ 
+Heap#Efficiency Table
 -	*[[Heap#Efficiency Table]]*
+ 
+Heap#Definition
 -	*[[Heap#Definition]]*
+ 
+Heap#Representing BST
 -	*[[Heap#Representing BST]]*
+ 
+Heap#Searching for a key in a BST Algorithm recursive
 -	*[[Heap#Searching for a key in a BST Algorithm recursive]]*
+ 
+Heap#Add a data object with key k
 -	*[[Heap#Add a data object with key k]]*
+ 
+Heap#Delete a key
 -	*[[Heap#Delete a key]]*
+ 
 
+ 
 ---
+ 
 ## Efficiency Table
+ 
 |                        | Add      | Search   | Delete  | Min/Max  |
+ 
 |------------------------|----------|----------|---------|----------|
+ 
 | Array                  | O(N)     | O(log N) | O(N)    | O(N)     |
+ 
 | Sorted Array           | O(N)     | O(log N) | O(N)    | O(1)     |
+ 
 | Linked List            | O(1)     | O(N)     | O(N)    | O(N)     |
+ 
 | Sorted Linked List     | O(N)     | O(N)     | O(N)    | O(1)     |
+ 
 | **Binary Search Tree** | O(log N) | O(log N) | O(log N)| O(log N) | 
+ 
 
+ 
 ---
+ 
 ## Definition
+ 
 A Heap is a **Complete rooted binary tree** satisfying the **heap property**.
+ 
 \* different from **rooted binary tree**
+ 
 
+ 
 
+ 
 
+ 
 **Complete rooted Binary Tree**: 
+ 
 -	All levels, apart from the lowest one, hold the maximum number of nodes
+ 
 -	Like filling a tree up level-by-level starting for the root
+ 
 
+ 
 *Complete binary tree is perfectly balanced and has a O(log N) height*
+ 
 
+ 
 **Heap Property**
+ 
 - Min Heap
+ 
 	- For each node x, the keys stored in the left and right children of x are greater or equal than the key stored in x
+ 
 	- Thus, the root will always store the minimum key
+ 
 - Max Heap
+ 
 	- For each node x, the keys stored in the left and right children of x are less or equal than the key stored in x
+ 
 	- Thus, the root will always store the maximum key
+ 
 
+ 
 
+ 
 ---
+ 
 
+ 
 ## Representing Heap
+ 
 - Since heaps are complete binary trees, we can use arrays to store them instead of a linked representation (Because heaps are **complete** binary trees and therefore it is always possible to deterministically to calculate the indices of all the children of a node as we need as well as node's parent)
+ 
 	- Root (level 1): at index 1
+ 
 	- Level 2: indices 2 - 3
+ 
 	- Level 3: indices 4-7
+ 
 	- --------
+ 
 	- Parent of i is **i/2**
+ 
 		- Integer division i/2
+ 
 	- Left child of i is 2i
+ 
 	- Right child of i is 2i + 1
+ 
 ---
+ 
 
+ 
 ## Heap Algorithms
+ 
 - Most heap algorithms work by
+ 
 	- First, making a change that breaks the heap property
+ 
 	- Then, fixing the heap (heapifying) to restore the heap property
+ 
 - Two types of heapifying actions
+ 
 	- **Sink**: bubble (perlocate) a key down to a correct location
+ 
 	- **Swim**: bubble a key up to a correct location
+ 
 
+ 
 - **Sink** (Max Heap)
+ 
 	- Traverse the tree down starting from the root
+ 
 	- While the node's key is less than one of the child's keys
+ 
 		- Swap the node's key with the largest child's key
+ 
 - **Swim** (Max Heap)
+ 
 	- Traverse the tree up starting from a leaf
+ 
 	- While the node's key is greater than the key in the parent
-		- Swap the node's key with the parent's key
+ 
+		- Swap the node's key with the parent's key 

@@ -1,3 +1,11 @@
+#
+# argv[1]: source, argv[2]: target
+#
+# Script to modify md files and convert them to html including a js
+# lib to render MD & LaTeX
+#
+
+
 import sys
 import os
 import os.path
@@ -30,27 +38,10 @@ html_files = [reformat(f) for f in md_files ]
 for i in range(len(md_files)):
     os.makedirs(os.path.dirname(html_files[i]), exist_ok=True) # create dir if doesnt exist
     shutil.copyfile(md_files[i], html_files[i]) # copy file
+    print("copying {}".format(md_files[i]));
 
     # append to beginning of file
     with open(html_files[i], "r+") as f:
         content = f.read()
         f.seek(0, 0)
         f.write(TEXME + "\n" + content)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
