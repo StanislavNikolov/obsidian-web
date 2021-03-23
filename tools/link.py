@@ -53,6 +53,9 @@ for filename in files:
 				title_src = stripNonStatic(title_src)
 				if title_src:
 					line = re.sub('(\[\[)(.*)(\]\])', '<a href="{}">\\2</a>'.format(title_src), line)
+				else:
+					line = re.sub('(\[\[)(.*)(\]\])', '<a href="{}">\\2</a>'.format(title), line)
+
 			print(line, '')
 
 	# filename complete src
