@@ -12,16 +12,28 @@ const scene = new Renderer.Scene(ctx);
 
 
 // Generate sample Nodes
-(() => {
-  console.log("main.js: generate sample nodes..")
-  for( let i = 0; i < 5; i ++ ){
-    const x = Math.floor(Math.random() * canvasDOM.width);
-    const y = Math.floor(Math.random() * canvasDOM.height);
-    const r = 30;
+const generateNodes = (nodes) => {
+	console.log("main.js: generate nodes..")
+	for(const node of nodes){
+		const x = Math.floor(Math.random() * canvasDOM.width * 3);
+		const y = Math.floor(Math.random() * canvasDOM.height * 3);
+		const r = 30;
 
-    const node = new Renderer.Node("test/nice", { x, y, r }, { color:"green", options: { visibleTitle: false } } );
-    scene.add(node);
-  }
+		const _node = new Renderer.Node({"path": node.path, "name": node.name}, node.links, { x, y, r }, { color:"green", options: { visibleTitle: false } } );
+		scene.add(_node);
+	}
+}
+
+(() => {
+	$.ajax({
+		url: "json/graph.json",
+		dataType: "json",
+		success: (res) => {
+			console.log(res);
+			generateNodes(res);
+		}
+	});
+
 })();
 
 const update = () => {

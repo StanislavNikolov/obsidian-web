@@ -11,7 +11,7 @@ class Scene {
     // pos: obj {x, y}, attached: obj (Node), held: boolean
     static mouse = {
         pos: {
-            x: null,
+           x: null,
             y: null,
         },
         pos_last: {
@@ -32,6 +32,16 @@ class Scene {
             Scene.mouse.pos_last.x = ctx.offsetX;
             Scene.mouse.pos_last.y = ctx.offsetY;
          }, false);
+		canvas.addEventListener('dblclick', (e) => {
+			Scene.mouse.pos.x = e.offsetX;
+			Scene.mouse.pos.y = e.offsetY
+			for(const node of Scene.nodes){
+				const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Scene.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Scene.mouse.pos.y), 2));
+				if(dist < node.pos.r){
+					node.onclick();
+				} 
+			}
+		});
 
         canvas.addEventListener('mouseup', (e) => { 
             Scene.mouse.held = false;
@@ -48,7 +58,7 @@ class Scene {
                 for(const node of Scene.nodes){
                     const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Scene.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Scene.mouse.pos.y), 2));
                     if(dist < node.pos.r){
-                        node.onclick();
+                        node.attach();
                     } 
                 }
 
@@ -109,32 +119,37 @@ class Scene {
  */
 class Node {
     path       = null;
-    filename   = null;
+    name   = null;
     pos        = null;
     appearance = null;
 
-    constructor(path, pos, appearance) {
-        this.path       = this.tokenizePath(path).path;
-        this.filename   = this.tokenizePath(path).filename;
+    constructor({path, name}, links, pos, appearance) {
+        this.path       = path;
+        this.name       = name;
+		this.links      = links;
         this.pos        = pos;
         this.appearance = appearance;
     }
 
     /* 
      * Responsible for disecting the different pieces of the path
-     * Returns an object containing the path to the file and the filename
+     * Returns an object containing the path to the file and the name
      */
     tokenizePath(path) {
         const parts = path.split('/');
-        const filename = parts[parts.length - 1];
+        const name = parts[parts.length - 1];
         
-        return { path, filename };
+        return { path, name };
     }
 
     /*
      * The onclick event for the Node
      */
-    onclick() {
+	onclick() {
+		window.location.href = this.path;
+		console.log("dblclick");
+	}
+    attach() {
         Scene.mouse.attached = this;
     }
 
@@ -145,8 +160,19 @@ class Node {
         ctx.arc(this.pos.x, this.pos.y, this.pos.r, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.fill();
+		ctx.font = "20px Georgia";
+		ctx.fillStyle = "black";
+		ctx.fillText(this.name, this.pos.x - this.pos.r * 2, this.pos.y + this.pos.r * 2);
 
         ctx.closePath();
+	}
+	drawLinks(ctx){
+        ctx.beginPath();
+
+        ctx.closePath();
+	}
+
+	open() {
 	}
 
     translate(x, y) {
