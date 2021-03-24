@@ -36,8 +36,10 @@ const generateNodes = (nodes) => {
 })();
 
 const update = () => {
-  Simulation.Render({ width: canvasDOM.width, height: canvasDOM.height }, ctx);
-  Simulation.Scene.updateMouse();
-  window.requestAnimationFrame(update);
+	Simulation.Render();
+	Simulation.Scene.updateMouse();
+	Simulation.Scene.updateGraphPhysics();
+
+	window.requestAnimationFrame(update);
 }
 update();

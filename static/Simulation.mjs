@@ -2,6 +2,7 @@
 
 const canvasDOM = document.getElementById('canvas');
 
+
 // Scene with static methods for managing bodies and the canvas
 class Scene {
 
@@ -52,6 +53,7 @@ class Scene {
 			Scene.mouse.pos_last = { x: null, y: null };
 			Scene.mouse.attached = null;
 		}, false);
+
 		canvas.addEventListener('mousemove', (e) => {
 			if (Scene.mouse.held) {
 				Scene.mouse.pos.x = e.offsetX;
@@ -99,15 +101,33 @@ class Scene {
 
 		}, false);
 	}
+
 	static add(node) {
 		Scene.nodes.push(node);
 	}
+
 	static updateMouse() {
 		if(Scene.mouse.attached) {
 			Scene.mouse.attached.pos.x = Scene.mouse.pos.x;
 			Scene.mouse.attached.pos.y = Scene.mouse.pos.y;
 		}        
 	}
+
+	static updateGraphPhysics() {
+		// https://en.wikipedia.org/wiki/Force-directed_graph_drawing
+		for(const node of Scene.nodes){
+			for(const link of node.links){
+				const linkedNode = Scene.findNodeByPath(link);
+
+				const dist = Math.pow(Math.abs(node.pos.x - linkedNode.pos.x), 2) + 
+					Math.pow(Math.abs(node.pos.y - linkedNode.pos.y), 2); 
+
+				if(dist > 300){
+				}
+			}
+		}
+	}
+
 	static findNodeByPath(path) {
 		for(const node of Scene.nodes){
 			if(node.path === path)
@@ -127,7 +147,7 @@ class Scene {
  */
 class Node {
 	path       = null;
-	name   = null;
+	name       = null;
 	pos        = null;
 	appearance = null;
 
@@ -217,8 +237,10 @@ const Render = () => {
 	ctx.fillRect(0, 0, width, height);
 
 	for(const node of Scene.nodes){
-		node.draw(ctx);
 		node.drawLinks(ctx);
+	}
+	for(const node of Scene.nodes){
+		node.draw(ctx);
 	}
 }
 

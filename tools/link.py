@@ -34,7 +34,6 @@ import fileinput
 import re
 
 def seekFullSource(name):
-    print(name)
     for fn in files:
         if fn.find("/{}.html".format(name)) != -1:
             return fn
