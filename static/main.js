@@ -1,14 +1,16 @@
 "use strict;"
 
-import Simulation from './Simulation.mjs';
+import { Node, Renderer, Scene } from './Simulation.mjs';
 
 // Setup
 const canvasDOM = document.getElementById('canvas');
+
 canvasDOM.width = window.innerWidth;
 canvasDOM.height = window.innerHeight;
 const ctx = canvas.getContext('2d');
 
-Simulation.Scene.Init(ctx);
+const scene = new Scene();
+Renderer.Init(ctx, { width: canvasDOM.width, height: canvasDOM.height }, scene);
 
 // Generate sample Nodes
 const generateNodes = (nodes) => {
@@ -18,8 +20,8 @@ const generateNodes = (nodes) => {
 		const y = Math.floor(Math.random() * canvasDOM.height * 3);
 		const r = 30;
 
-		const _node = new Simulation.Node({"path": node.path, "name": node.name}, node.links, { x, y, r }, { color:"green", options: { visibleTitle: false } } );
-		Simulation.Scene.add(_node);
+		const _node = new Node({"path": node.path, "name": node.name}, node.links, { x, y, r }, { color:"green", options: { visibleTitle: false } } );
+		scene.add(_node);
 	}
 }
 
@@ -36,9 +38,8 @@ const generateNodes = (nodes) => {
 })();
 
 const update = () => {
-	Simulation.Render();
-	Simulation.Scene.updateMouse();
-	Simulation.Scene.updateGraphPhysics();
+	Renderer.draw();
+	Renderer.updateMouse();
 
 	window.requestAnimationFrame(update);
 }

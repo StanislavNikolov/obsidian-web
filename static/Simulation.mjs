@@ -3,138 +3,26 @@
 const canvasDOM = document.getElementById('canvas');
 
 
-// Scene with static methods for managing bodies and the canvas
 class Scene {
+	nodes = [];
+	links = [];
 
-	// Arrays to render
-	static nodes = [];
-	static links = [];
-
-	// pos: obj {x, y}, attached: obj (Node), held: boolean
-	static mouse = {
-		pos: {
-			x: null,
-			y: null,
-		},
-		pos_last: {
-			x: 0,
-			y: 0
-		},
-		attached: null,
-		held: false,
-	};
-
-	static ctx = null;
-
-	static Init(ctx) {
-		Scene.ctx = ctx;
-
-		// setup canvas event listeners
-		canvas.addEventListener('mousedown', (e) => { 
-			Scene.mouse.held = true;
-			Scene.mouse.pos_last.x = ctx.offsetX;
-			Scene.mouse.pos_last.y = ctx.offsetY;
-		}, false);
-
-		canvas.addEventListener('dblclick', (e) => {
-			Scene.mouse.pos.x = e.offsetX;
-			Scene.mouse.pos.y = e.offsetY
-			for(const node of Scene.nodes){
-				const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Scene.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Scene.mouse.pos.y), 2));
-				if(dist < node.pos.r){
-					node.onclick();
-				} 
-			}
-		});
-
-		canvas.addEventListener('mouseup', (e) => { 
-			Scene.mouse.held = false;
-			Scene.mouse.pos = { x: null, y: null };
-			Scene.mouse.pos_last = { x: null, y: null };
-			Scene.mouse.attached = null;
-		}, false);
-
-		canvas.addEventListener('mousemove', (e) => {
-			if (Scene.mouse.held) {
-				Scene.mouse.pos.x = e.offsetX;
-				Scene.mouse.pos.y = e.offsetY
-
-				// Detect click on node
-				for(const node of Scene.nodes){
-					const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Scene.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Scene.mouse.pos.y), 2));
-					if(dist < node.pos.r){
-						node.attach();
-					} 
-				}
-
-				if(!Scene.mouse.attached) {
-					// move map
-					const diffX = Scene.mouse.pos.x - Scene.mouse.pos_last.x;
-					const diffY = Scene.mouse.pos.y - Scene.mouse.pos_last.y;
-
-					// translate all elements
-					for(const node of Scene.nodes){
-						node.translate(diffX, diffY)
-					}
-				}
-
-				Scene.mouse.pos_last.x = Scene.mouse.pos.x;
-				Scene.mouse.pos_last.y = Scene.mouse.pos.y;
-			}
-		}, false);
-		canvas.addEventListener('wheel', (e) => {
-			e.preventDefault();
-			if(e.deltaY > 0){
-				// zoom out
-				// ctx.scale(0.95, 0.95);
-				for(const node of Scene.nodes){
-					node.scale(0.95);
-				}
-			} else {
-				// zoom in
-				// ctx.scale(1.05, 1.05);
-				for(const node of Scene.nodes){
-					node.scale(1.05);
-				}
-			}
-
-
-		}, false);
+	constructor(){
 	}
 
-	static add(node) {
-		Scene.nodes.push(node);
+	add(node) {
+		this.nodes.push(node);
 	}
 
-	static updateMouse() {
-		if(Scene.mouse.attached) {
-			Scene.mouse.attached.pos.x = Scene.mouse.pos.x;
-			Scene.mouse.attached.pos.y = Scene.mouse.pos.y;
-		}        
-	}
-
-	static updateGraphPhysics() {
-		// https://en.wikipedia.org/wiki/Force-directed_graph_drawing
-		for(const node of Scene.nodes){
-			for(const link of node.links){
-				const linkedNode = Scene.findNodeByPath(link);
-
-				const dist = Math.pow(Math.abs(node.pos.x - linkedNode.pos.x), 2) + 
-					Math.pow(Math.abs(node.pos.y - linkedNode.pos.y), 2); 
-
-				if(dist > 300){
-				}
-			}
-		}
-	}
-
-	static findNodeByPath(path) {
-		for(const node of Scene.nodes){
+	findNodeByPath(path) {
+		for(const node of this.nodes){
 			if(node.path === path)
 				return node
 		}
 	}
+
 }
+
 
 /*
  * Every Node represents a file (not a folder). It can be linked
@@ -178,31 +66,9 @@ class Node {
 		this.open();
 	}
 	attach() {
-		Scene.mouse.attached = this;
+		Renderer.mouse.attached = this;
 	}
 
-	draw(ctx){
-		ctx.beginPath();
-		ctx.fillStyle = this.appearance.color;
-
-		ctx.arc(this.pos.x, this.pos.y, this.pos.r, 0, 2 * Math.PI);
-		ctx.stroke();
-		ctx.fill();
-		ctx.font = "20px Georgia";
-		ctx.fillStyle = "black";
-		ctx.fillText(this.name, this.pos.x - this.pos.r * 2, this.pos.y + this.pos.r * 2);
-
-		ctx.closePath();
-	}
-	drawLinks(ctx){
-		for(const link of this.links){
-			ctx.beginPath();
-			const node = Scene.findNodeByPath(link);
-			ctx.moveTo(this.pos.x, this.pos.y);
-			ctx.lineTo(node.pos.x, node.pos.y);
-			ctx.stroke();
-		}
-	}
 
 	open() {
 		window.location.href = this.path;
@@ -225,23 +91,146 @@ class Node {
 	}
 }
 
-/*
- * Params: [0] ctx object to draw to
- */
-const Render = () => {
-	const ctx = Scene.ctx;
-	const width = canvasDOM.width;
-	const height = canvasDOM.height;
+class Renderer {
 
-	ctx.fillStyle = "gray";
-	ctx.fillRect(0, 0, width, height);
+	static ctx = null;
+    static width = null;
+    static height = null;
+	static scene = null;
+	
+	// pos: obj {x, y}, attached: obj (Node), held: boolean
+	static mouse = {
+		pos: {
+			x: null,
+			y: null,
+		},
+		pos_last: {
+			x: 0,
+			y: 0
+		},
+		attached: null,
+		held: false,
+	};
 
-	for(const node of Scene.nodes){
-		node.drawLinks(ctx);
+	static Init(ctx, { width, height }, scene){
+		Renderer.ctx = ctx;
+		Renderer.width = width;
+		Renderer.height = height;
+		Renderer.scene = scene;
+
+		Renderer.InitEventListeners();
 	}
-	for(const node of Scene.nodes){
-		node.draw(ctx);
+
+	static updateMouse() {
+		if(Renderer.mouse.attached) {
+			Renderer.mouse.attached.pos.x = Renderer.mouse.pos.x;
+			Renderer.mouse.attached.pos.y = Renderer.mouse.pos.y;
+		}        
+	}
+	
+	static draw() {
+		Renderer.ctx.fillStyle = "gray";
+		Renderer.ctx.fillRect(0, 0, Renderer.width, Renderer.height);
+
+		for(const node of Renderer.scene.nodes){
+			const ctx = Renderer.ctx;
+
+			ctx.beginPath();
+			ctx.fillStyle = node.appearance.color;
+
+			ctx.arc(node.pos.x, node.pos.y, node.pos.r, 0, 2 * Math.PI);
+			ctx.stroke();
+			ctx.fill();
+			ctx.font = "20px Georgia";
+			ctx.fillStyle = "black";
+			ctx.fillText(node.name, node.pos.x - node.pos.r * 2, node.pos.y + node.pos.r * 2);
+
+			ctx.closePath();
+		}
+		for(const node of Renderer.scene.nodes){
+			const ctx = Renderer.ctx;
+
+			for(const link of node.links){
+				ctx.beginPath();
+				const linkedNode = Renderer.scene.findNodeByPath(link);
+				ctx.moveTo(node.pos.x, node.pos.y);
+				ctx.lineTo(linkedNode.pos.x, linkedNode.pos.y);
+				ctx.stroke();
+			}
+		}
+	}
+
+	static InitEventListeners() {
+		// setup canvas event listeners
+		canvas.addEventListener('mousedown', (e) => { 
+			Renderer.mouse.held = true;
+			Renderer.mouse.pos_last.x = Renderer.ctx.offsetX;
+			Renderer.mouse.pos_last.y = Renderer.ctx.offsetY;
+		}, false);
+
+		canvas.addEventListener('dblclick', (e) => {
+			Renderer.mouse.pos.x = e.offsetX;
+			Renderer.mouse.pos.y = e.offsetY
+			for(const node of Renderer.scene.nodes){
+				const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - this.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - this.mouse.pos.y), 2));
+				if(dist < node.pos.r){
+					node.onclick();
+				} 
+			}
+		});
+
+		canvas.addEventListener('mouseup', (e) => { 
+			Renderer.mouse.held = false;
+			Renderer.mouse.pos = { x: null, y: null };
+			Renderer.mouse.pos_last = { x: null, y: null };
+			Renderer.mouse.attached = null;
+		}, false);
+
+		canvas.addEventListener('mousemove', (e) => {
+			if (Renderer.mouse.held) {
+				Renderer.mouse.pos.x = e.offsetX;
+				Renderer.mouse.pos.y = e.offsetY
+
+				// Detect click on node
+				for(const node of Renderer.scene.nodes){
+					const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Renderer.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Renderer.mouse.pos.y), 2));
+					if(dist < node.pos.r){
+						node.attach();
+					} 
+				}
+
+				if(!Renderer.mouse.attached) {
+					// move map
+					const diffX = Renderer.mouse.pos.x - Renderer.mouse.pos_last.x;
+					const diffY = Renderer.mouse.pos.y - Renderer.mouse.pos_last.y;
+
+					// translate all elements
+					for(const node of Renderer.scene.nodes){
+						node.translate(diffX, diffY)
+					}
+				}
+
+				Renderer.mouse.pos_last.x = Renderer.mouse.pos.x;
+				Renderer.mouse.pos_last.y = Renderer.mouse.pos.y;
+			}
+		}, false);
+		canvas.addEventListener('wheel', (e) => {
+			e.preventDefault();
+			if(e.deltaY > 0){
+				// zoom out
+				// ctx.scale(0.95, 0.95);
+				for(const node of Renderer.scene.nodes){
+					node.scale(0.95);
+				}
+			} else {
+				// zoom in
+				// ctx.scale(1.05, 1.05);
+				for(const node of Renderer.scene.nodes){
+					node.scale(1.05);
+				}
+			}
+		}, false);
 	}
 }
 
-export default { Node, Render, Scene }
+export { Node, Renderer, Scene }
