@@ -1,6 +1,6 @@
 "use strict;"
 
-import { Node, Renderer, Graph } from './Simulation.mjs';
+import { Vec, Node, Renderer, Graph } from './Simulation.mjs';
 
 // Setup
 const fpsDOM = document.getElementById('fps');
@@ -10,19 +10,21 @@ canvasDOM.height = window.innerHeight;
 const ctx = canvas.getContext('2d');
 
 const graph = new Graph();
-Renderer.Init(ctx, { width: canvasDOM.width, height: canvasDOM.height }, graph);
+const renderer = new Renderer(ctx, canvasDOM.width, canvasDOM.height, graph);
+
 
 // Generate sample Nodes
 const generateNodes = (nodes) => {
 	console.log("main.js: generate nodes..")
 	for(const node of nodes){
-		const x = Math.floor(Math.random() * canvasDOM.width);
-		const y = Math.floor(Math.random() * canvasDOM.height);
-		const r = 30;
+		const x = Math.random() * canvasDOM.width;
+		const y = Math.random() * canvasDOM.height;
+		const appearance = { color: "blue", options: { visibleTitle: false } };
 
-		const _node = new Node({path: node.path, name: node.name}, node.links, { x, y, r }, { color:"green", options: { visibleTitle: false } } );
+		const _node = new Node(node.path, node.name, node.links, new Vec(x, y), appearance);
 		graph.add(_node);
 	}
+	console.log(graph);
 }
 
 (() => {
@@ -50,8 +52,8 @@ const update = () => {
 	}
 
 	graph.calculateForces();
-	Renderer.updateMouse();
-	Renderer.draw();
+	renderer.updateMouse();
+	renderer.draw();
 
 	c++;
 	window.requestAnimationFrame(update);
