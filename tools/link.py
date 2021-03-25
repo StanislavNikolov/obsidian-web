@@ -74,5 +74,30 @@ for filename in files:
         node["links"] = links
         nodes.append(node)
 
+def findNodeByLink(link):
+    for node in nodes:
+        if node["path"] == link:
+            return node
+
+for node in nodes:
+    for link in node["links"]:
+        _node = findNodeByLink(link)
+        if node["path"] not in _node["links"]:
+            _node["links"].append(node["path"])
+
+
+
 with open(OUTFILE, "w") as outfile:
     json.dump(nodes, outfile)
+
+
+
+
+
+
+
+
+
+
+
+

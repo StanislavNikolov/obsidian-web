@@ -1,18 +1,33 @@
 <html>
-    <head>
+	<head>
 
-    </head>
-    <style>
-        * {
-            padding: 0 0;
-            margin: 0 0;
-        }
-    </style>
+	</head>
+	<style>
+		* {
+			padding: 0 0;
+			margin: 0 0;
+		}
 
-    <body>
-        <canvas id='canvas' id='canvas'></canvas>
+		#fps {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			font-size: 30px;
+			color: black;
+
+			-webkit-user-select: none; /* Safari */        
+			-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* IE10+/Edge */
+			user-select: none; /* Standard */
+		}
+
+	</style>
+
+	<body>
+		<p id='fps'> fps </p>
+		<canvas id='canvas' id='canvas'></canvas>
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
-        <script type='module' src='main.js'></script>    
-    </body>
+		<script type='module' src='main.js'></script>    
+	</body>
 </html>

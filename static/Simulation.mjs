@@ -3,9 +3,8 @@
 const canvasDOM = document.getElementById('canvas');
 
 
-class Scene {
+class Graph {
 	nodes = [];
-	links = [];
 
 	constructor(){
 	}
@@ -21,54 +20,88 @@ class Scene {
 		}
 	}
 
+	calculateForces(){
+		for(const node of this.nodes){
+			const links = node.links;
+			for(const link of links){
+				const linkedNode = this.findNodeByPath(link);
+
+				const distX = node.pos.x - linkedNode.pos.x;
+				const distY = node.pos.y - linkedNode.pos.y;
+				const dist = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+
+				// force between linked nodes that are more than 200 apart
+				if(dist > 200){
+					linkedNode.vel_x += distX * (node.weight / 1000);
+					linkedNode.vel_y += distY * (node.weight / 1000);
+				}
+				// repell linked nodes that are 150 apart
+				else if(dist < 150) {
+					linkedNode.vel_x -= (1000 / distX) * (node.weight / 1000);
+					linkedNode.vel_y -= (1000 / distY) * (node.weight / 1000);
+				}
+			}
+		}
+		for(const node of this.nodes){
+			for(const _node of this.nodes){
+				if(node !== _node && !node.links.includes(_node.path) && !_node.links.includes(node.path)){
+					const distX = node.pos.x - _node.pos.x;
+					const distY = node.pos.y - _node.pos.y;
+					const dist = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+					
+					// repell unlinked nodes that are 300 apart
+					if(dist < 200){
+						_node.vel_x -= (1000 / distX) * (node.weight / 1000);
+						_node.vel_y -= (1000 / distY) * (node.weight / 1000);
+					}
+				}
+			}
+		}
+		for(const node of this.nodes){
+			
+			node.pos.x += node.vel_x / node.weight;
+			node.pos.y += node.vel_y / node.weight;
+
+			// friction
+			node.vel_x *= 0.9;
+			node.vel_y *= 0.9;
+		}
+	}
 }
 
 
 /*
  * Every Node represents a file (not a folder). It can be linked
  * to other Nodes (all nodes and their links are represented in graph.json).
- * 
- * params: [0] String: absolute path to the file the node represents, 
- *         [1] Object: pos { x, y, r }
- *         [2] Object: appearance { color, options { visibleTitle: boolean } }
- *
  */
 class Node {
+	links      = null;
 	path       = null;
 	name       = null;
 	pos        = null;
 	appearance = null;
+	vel_x      = null;
+	vel_y      = null;
+	weight     = null;
 
 	constructor({path, name}, links, pos, appearance) {
 		this.path       = path;
 		this.name       = name;
 		this.links      = links;
 		this.pos        = pos;
+		this.pos.r      = 20 + links.length * 5;
 		this.appearance = appearance;
+		this.weight     = 100 + links.length * 20;
 	}
 
-	/* 
-	 * Responsible for disecting the different pieces of the path
-	 * Returns an object containing the path to the file and the name
-	 */
-	tokenizePath(path) {
-		const parts = path.split('/');
-		const name = parts[parts.length - 1];
-
-		return { path, name };
-	}
-
-	/*
-	 * The onclick event for the Node
-	 */
 	onclick() {
 		console.log("dblclick");
 		this.open();
 	}
+
 	attach() {
 		Renderer.mouse.attached = this;
 	}
-
 
 	open() {
 		window.location.href = this.path;
@@ -96,7 +129,7 @@ class Renderer {
 	static ctx = null;
     static width = null;
     static height = null;
-	static scene = null;
+	static graph = null;
 	
 	// pos: obj {x, y}, attached: obj (Node), held: boolean
 	static mouse = {
@@ -112,11 +145,11 @@ class Renderer {
 		held: false,
 	};
 
-	static Init(ctx, { width, height }, scene){
+	static Init(ctx, { width, height }, graph){
 		Renderer.ctx = ctx;
 		Renderer.width = width;
 		Renderer.height = height;
-		Renderer.scene = scene;
+		Renderer.graph = graph;
 
 		Renderer.InitEventListeners();
 	}
@@ -132,7 +165,21 @@ class Renderer {
 		Renderer.ctx.fillStyle = "gray";
 		Renderer.ctx.fillRect(0, 0, Renderer.width, Renderer.height);
 
-		for(const node of Renderer.scene.nodes){
+		// Render links
+		for(const node of Renderer.graph.nodes){
+			const ctx = Renderer.ctx;
+
+			for(const link of node.links){
+				ctx.beginPath();
+				const linkedNode = Renderer.graph.findNodeByPath(link);
+				ctx.moveTo(node.pos.x, node.pos.y);
+				ctx.lineTo(linkedNode.pos.x, linkedNode.pos.y);
+				ctx.stroke();
+			}
+		}
+
+		// Render nodes
+		for(const node of Renderer.graph.nodes){
 			const ctx = Renderer.ctx;
 
 			ctx.beginPath();
@@ -143,20 +190,9 @@ class Renderer {
 			ctx.fill();
 			ctx.font = "20px Georgia";
 			ctx.fillStyle = "black";
-			ctx.fillText(node.name, node.pos.x - node.pos.r * 2, node.pos.y + node.pos.r * 2);
+			ctx.fillText(node.name, node.pos.x - node.name.length * 4, node.pos.y + Math.max(node.pos.r * 2, 30));
 
 			ctx.closePath();
-		}
-		for(const node of Renderer.scene.nodes){
-			const ctx = Renderer.ctx;
-
-			for(const link of node.links){
-				ctx.beginPath();
-				const linkedNode = Renderer.scene.findNodeByPath(link);
-				ctx.moveTo(node.pos.x, node.pos.y);
-				ctx.lineTo(linkedNode.pos.x, linkedNode.pos.y);
-				ctx.stroke();
-			}
 		}
 	}
 
@@ -171,7 +207,7 @@ class Renderer {
 		canvas.addEventListener('dblclick', (e) => {
 			Renderer.mouse.pos.x = e.offsetX;
 			Renderer.mouse.pos.y = e.offsetY
-			for(const node of Renderer.scene.nodes){
+			for(const node of Renderer.graph.nodes){
 				const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - this.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - this.mouse.pos.y), 2));
 				if(dist < node.pos.r){
 					node.onclick();
@@ -192,7 +228,7 @@ class Renderer {
 				Renderer.mouse.pos.y = e.offsetY
 
 				// Detect click on node
-				for(const node of Renderer.scene.nodes){
+				for(const node of Renderer.graph.nodes){
 					const dist = Math.sqrt(Math.pow(Math.abs(node.pos.x - Renderer.mouse.pos.x), 2) + Math.pow(Math.abs(node.pos.y - Renderer.mouse.pos.y), 2));
 					if(dist < node.pos.r){
 						node.attach();
@@ -205,7 +241,7 @@ class Renderer {
 					const diffY = Renderer.mouse.pos.y - Renderer.mouse.pos_last.y;
 
 					// translate all elements
-					for(const node of Renderer.scene.nodes){
+					for(const node of Renderer.graph.nodes){
 						node.translate(diffX, diffY)
 					}
 				}
@@ -219,13 +255,13 @@ class Renderer {
 			if(e.deltaY > 0){
 				// zoom out
 				// ctx.scale(0.95, 0.95);
-				for(const node of Renderer.scene.nodes){
+				for(const node of Renderer.graph.nodes){
 					node.scale(0.95);
 				}
 			} else {
 				// zoom in
 				// ctx.scale(1.05, 1.05);
-				for(const node of Renderer.scene.nodes){
+				for(const node of Renderer.graph.nodes){
 					node.scale(1.05);
 				}
 			}
@@ -233,4 +269,4 @@ class Renderer {
 	}
 }
 
-export { Node, Renderer, Scene }
+export { Node, Renderer, Graph }
